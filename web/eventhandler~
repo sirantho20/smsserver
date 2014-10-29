@@ -1,0 +1,119 @@
+#!/bin/sh
+#SCRIPT: 	Event handler SMS
+#AUTHOR: 	Davide Cantaluppi kanta@kdev.it
+#DATE: 		28.02.06
+#REV: 		1
+#PLATFORM: 	Not platform dependent
+#PURPOSE:	Handle event linked to smsd daemon
+#
+#Usefull Variables are 
+#
+# $1	
+# $2
+# $3
+#
+#Values associated to these variables are
+#
+# $1 is the type of the event wich can be SENT, RECEIVED, FAILED or REPORT.
+# $2 is the filename of the sms.
+# $3 is the message id. Only used for SENT messages with status report.
+#
+#BEGIN SCRIPT
+#
+#UNCOMMENT THIS LINES TO ACTIVATE MYSMS MODULE (MYSQL CLIENT)
+#if [ "$1" = "RECEIVED" ]; then
+#/etc/sms/scripts/mysql_parser.php
+#fi
+#
+#UNCOMMENT THIS IF CLAUSE AND ITS CONTENT TO ACTIVATE FORWARDING VIA EMAIL (CHOOSE YOUR SERVER METHOD)
+#if [ "$1" = "RECEIVED" ]; then
+#	. /mnt/flash/root/conf/smtp.conf
+	#if [ "$FORWARDSMS" = "YES" ]; then
+		## Use this to test with static  settings with auth login
+		#/etc/mailsend/mailsend -port 2525  -auth-login -user USERNAME -pass PASSWORD -d kdev.it -smtp www.kdev.it -t kanta@kdev.it -f davide@cantaluppi.it +cc +bc -sub "SMS SMS RECEIVED" < $2
+		#
+		#For GMAIL use authentication as :  -starttls -auth-plain -user USERNAME -pass 'PASSWORD' 
+		#
+		#NO AUTH - OPEN RELAY ON MAILSERVER
+		#/etc/mailsend/mailsend -port 25 -d $DOMAIN -smtp $SMTP -t $TO -f $FROM +cc +bc -sub "SMS $2 $SUBJECT" < $2
+		#/etc/mailsend/smstomail "$2" "$1"
+	#fi
+#fi
+#
+#Enable this to activate custom events
+#
+#if [ "$1" = "RECEIVED" ]; then
+#/mnt/flash/root/source/custom/custom_rx "$2"
+#fi
+#
+#Save messages in XML format
+#if [ "$1" = "RECEIVED" ]; then
+#/etc/sms/scripts/sms2xml $1 $2 $3
+#fi
+
+#add by aaron (method 1)
+#if ["$1" = "RECEIVED" ]; then
+#$NUMB=`/bin/cat $1 | /bin/grep \"From:\" | awk \'{print $2}\'`; 
+
+#/usr/local/bin/php -q <<EOF
+#<?php
+#\$client = new SoapClient("http://192.168.1.148/webapplication1/WebService1.asmx?wsdl");
+#\$client->__setLocation("http://192.168.1.148/webapplication1/WebService1.asmx?basic");
+#I need to extract the phone number to send the reply
+#
+#\$result = \$client->HelloWorld(array('param1' => 'Hello', 'param2' =>'Aaron'))->HelloWorldResult;
+#?>
+#EOF
+#
+
+#Now I generate the file for outgoing queue
+#FILE=`/bin/mktemp /mnt/flash/spool/outgoing/send_XXXXXX`;
+#echo "To: $NUMB" >> $FILE;
+#echo "">>$FILE;
+#echo $result >> $FILE;
+
+#fi
+
+#add by aaron (method 2)
+if [ "$1" = "RECEIVED" ]; then
+   /etc/sms/scripts/acsysparser "$2"
+fi
+
+#
+#NEVER DISABLE THE FOLLOWING SCRIPT FOR MESSAGE RECEIVING
+if [ "$1" = "RECEIVED" ]; then                                         
+#comment parseurl.sh and uncomment parser.php to disable MMS receiving improove performance if you do not use MMS
+/etc/sms/scripts/parser.php $2
+#/mnt/flash/root/mmsbox/parseurl.sh $2 &
+fi  
+#
+#                                                                      
+#NEVER DISABLE THE FOLLOWING SCRIPT FOR MESSAGE OUTGOING                 
+if [ "$1" = "SENT" ]; then                                             
+# Uncomment rows below to receive a tone at the phone number indicated, for every message sent
+#if [ "$2" != "/mnt/flash/spool/sent/testdial.txt" ]; then
+#echo "From: dialing" > /mnt/flash/spool/outgoing/testdial.txt
+#echo "To: 39XXXXXXXXXX" >> /mnt/flash/spool/outgoing/testdial.txt
+#echo "Voicecall: true" >> /mnt/flash/spool/outgoing/testdial.txt
+#echo "" >> /mnt/flash/spool/outgoing/testdial.txt
+#echo "TONE: 1,2" >> /mnt/flash/spool/outgoing/testdial.txt
+#fi
+/etc/sms/scripts/out.php $2                                                
+#/etc/smsc_ctl $2
+fi                                                                         
+# 
+#Event on failed message
+if [ "$1" = "FAILED" ]; then                                                                                                                                                                 
+	/etc/sms/scripts/fail.php $2
+fi
+#
+#This is the custom script written by user for RX action
+#
+#source='/mnt/flash/root/conf/smtp.conf'
+#
+#fi 
+#This is the custom script written by user for TX action
+#if [ "$1" = "SENT" ]; then  
+#/mnt/flash/root/source/custom/custom_tx "$2"
+#fi
+#

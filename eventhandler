@@ -1,0 +1,25 @@
+#!/bin/sh
+#SCRIPT: 	Event handler SMS
+#AUTHOR: 	Davide Cantaluppi kanta@kdev.it
+#DATE: 		28.02.06
+#REV: 		1
+#PLATFORM: 	Not platform dependent
+#PURPOSE:	Handle event linked to smsd daemon
+#
+#Usefull Variables are 
+#
+# $1	
+# $2
+# $3
+#
+#Values associated to these variables are
+#
+# $1 is the type of the event wich can be SENT, RECEIVED, FAILED or REPORT.
+# $2 is the filename of the sms.
+# $3 is the message id. Only used for SENT messages with status report.
+#
+#BEGIN SCRIPT
+#
+/home/tony/Documents/projects/Yii/smsserver/yii sms $1 $2
+# /etc/sms/scripts/fail.php $2
+
