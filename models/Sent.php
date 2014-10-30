@@ -3,8 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\db\Expression;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "sent".
@@ -12,16 +10,17 @@ use yii\db\ActiveRecord;
  * @property integer $id
  * @property integer $message_id
  * @property string $date_sent
- * @property integer $from_number
- * @property integer $to_number
+ * @property string $from_number
+ * @property string $to_number
  * @property integer $smsc_number
  * @property string $report
  * @property string $modem
  * @property string $delivery_date
+ * @property string $date_saved
  * @property string $is_flash
  * @property string $message
  */
-class Sent extends ActiveRecord
+class Sent extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -37,10 +36,13 @@ class Sent extends ActiveRecord
     public function rules()
     {
         return [
-            [['message_id', 'from_number', 'to_number', 'smsc_number'], 'integer'],
-            [['date_sent', 'delivery_date'], 'safe'],
+            [['message_id', 'smsc_number'], 'integer'],
+            [['date_sent', 'delivery_date', 'date_saved'], 'safe'],
+            [['to_number', 'message'], 'required'],
+            [['from_number'], 'string', 'max' => 255],
+            [['to_number'], 'string', 'max' => 20],
             [['report', 'modem', 'is_flash'], 'string', 'max' => 10],
-            [['message'], 'string', 'max' => 255]
+            [['message'], 'string', 'max' => 200]
         ];
     }
 
@@ -59,10 +61,9 @@ class Sent extends ActiveRecord
             'report' => 'Report',
             'modem' => 'Modem',
             'delivery_date' => 'Delivery Date',
+            'date_saved' => 'Date Saved',
             'is_flash' => 'Is Flash',
             'message' => 'Message',
         ];
     }
-
-
 }

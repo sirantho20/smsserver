@@ -17,9 +17,15 @@ class SmsController extends Controller {
             case "SENT":
                 \Yii::$app->sms->sent($file);
                 break;
+
             case "RECEIVED":
                 \Yii::$app->sms->received($file);
                 break;
+
+            case "REPORT":
+                \Yii::$app->sms->report($file);
+                break;
+
             default:
                 break;
         }

@@ -17,9 +17,10 @@ class sms extends Component {
     public $sent_keys  = [
         'From'  => 'from_number',
         'To'    => 'to_number',
+        'To_TOA'    =>'toa',
         'Flash' => 'is_flash',
         'Report' => 'report',
-        'Sent'  => 'delivery_date',
+        'Sent'  => 'date_sent',
         'Message_id'    =>'message_id',
         'Modem' => 'modem',
         'SMSC'  => 'smsc_number'
@@ -37,6 +38,11 @@ class sms extends Component {
         'IMSI'          => 'imsi',
         'Subject'       => 'modem'
     ];
+
+    public $report_keys = [
+      'Discharge_timestamp' => 'delivery_date'
+    ];
+
 
     public function received($file='')
     {
@@ -114,7 +120,7 @@ class sms extends Component {
 
             }
             $sent->message = $body;
-            $sent->date_sent = new Expression('now()');
+            $sent->date_saved = new Expression('now()');
             if($sent->save())
             {
                 echo 'saving successful'."\n";
@@ -122,6 +128,50 @@ class sms extends Component {
             else
             {
                 print_r($sent->getErrors());
+            }
+
+        }
+    }
+
+    public function report($file='')
+    {
+        if(is_file($file))
+        {
+            $arr = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            $id = null;
+            foreach ( $arr as $line) {
+                if($pos = strpos($line,':'))
+                {
+                    $key = trim(substr($line,0, $pos));
+                    $value = trim(substr($line, $pos + 1, strlen($line)));
+
+                    // Fetch store message
+                    if(trim($key) == 'Message_id')
+                    {
+                       $id = (int)$value;
+                    }
+
+                    // Append delivery date
+                    if(array_key_exists(trim($key), $this->report_keys))
+                    {
+                        if($id != null)
+                        {
+                            //echo is_int($id)?'yesssss':'nooooo';
+                            $record = Sent::findOne(['message_id' => $id]);
+                            $record->delivery_date = trim($value);
+                            if($record->save())
+                            {
+                                echo 'update successful'."\n";
+                                break;
+                            }
+                            else
+                            {
+                                echo 'error saving delivery report';
+                            }
+                        }
+                    }
+                }
+
             }
 
         }
