@@ -78,7 +78,7 @@ if (strlen($result)>0)
     if ($resultArr[0]=="-10000")
 	{
 		#invalid mobile, use the from mobile number plus register country code to send
-		echo $mobileNum."is not registed in acsysware or invalid.";
+		//echo $mobileNum."is not registed in acsysware or invalid.";
 		$prefix = "233";
 		if (strpos($mobileNum,$prefix)>0)
 		{
@@ -111,7 +111,7 @@ if (strlen($result)>0)
 		$outgoingFile = '/var/spool/sms/outgoing/'.$outgoingFile;
 		$sendContent = "From: 00000000000\n";
 		#$sendContent = "From:$sender\n";
-		echo "ACSYS: sending reply";
+		//echo "ACSYS: sending reply";
 	}
 	$sendContent.="To: ".$mobileNum."\n";
 	$sendContent.="\n";
@@ -121,11 +121,5 @@ if (strlen($result)>0)
 	$f = fopen($outgoingFile, "wb");
 	fputs($f, $sendContent);
 	fclose($f);
-	#echo "<a href=http://192.168.1.99/direct_send?nphone=8618617061816&testo=This is a test from foxbox/>";
-	if($isDebug)
-	{
-		echo "\r\nSMS content had been written to file:".$outgoingFile;
-		echo "\r\nEnd to call";
-	}
 }
 ?>
