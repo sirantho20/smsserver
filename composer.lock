@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "865ce4d9e6c2c445e707b268f070dd3f",
+    "hash": "57ca23f681a2c4b702bea65da7a758b5",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -102,16 +102,16 @@
         },
         {
             "name": "bower-asset/jquery.inputmask",
-            "version": "3.1.34",
+            "version": "3.1.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RobinHerbots/jquery.inputmask.git",
-                "reference": "f48d10463039a23469e65cc4b5c0b4409e8fb596"
+                "reference": "dc1039e8b08fee22aca2003c4559530ce111f947"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RobinHerbots/jquery.inputmask/zipball/f48d10463039a23469e65cc4b5c0b4409e8fb596",
-                "reference": "f48d10463039a23469e65cc4b5c0b4409e8fb596",
+                "url": "https://api.github.com/repos/RobinHerbots/jquery.inputmask/zipball/dc1039e8b08fee22aca2003c4559530ce111f947",
+                "reference": "dc1039e8b08fee22aca2003c4559530ce111f947",
                 "shasum": ""
             },
             "require": {
@@ -310,6 +310,60 @@
                 "html"
             ],
             "time": "2013-11-30 08:25:19"
+        },
+        {
+            "name": "its/php-smpp",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/agladkov/php-smpp.git",
+                "reference": "1cb79e150fb3a976a7c8cfb51398308dc4fd0669"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/agladkov/php-smpp/zipball/1cb79e150fb3a976a7c8cfb51398308dc4fd0669",
+                "reference": "1cb79e150fb3a976a7c8cfb51398308dc4fd0669",
+                "shasum": ""
+            },
+            "require": {
+                "ext-sockets": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "OnlineCity": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "OnlineCity",
+                    "email": "hd@onlinecity.dk",
+                    "homepage": "http://www.onlinecity.dk/"
+                },
+                {
+                    "name": "Anton Gladkov",
+                    "email": "agladkov@it-lame.ru",
+                    "homepage": "http://www.it-lame.ru"
+                }
+            ],
+            "description": "PHP SMPP client library",
+            "homepage": "http://github.com/agladkov/php-smpp",
+            "keywords": [
+                "lib",
+                "php",
+                "smpp"
+            ],
+            "time": "2014-03-04 09:48:29"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -896,7 +950,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "its/php-smpp": 20
+    },
     "prefer-stable": false,
     "platform": {
         "php": ">=5.4.0"

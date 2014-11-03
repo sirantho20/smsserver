@@ -14,6 +14,8 @@ use yii\db\Expression;
 
 class sms extends Component {
 
+    public $default_transport = 'smstools';
+
     public $sent_keys  = [
         'From'  => 'from_number',
         'To'    => 'to_number',
@@ -42,7 +44,6 @@ class sms extends Component {
     public $report_keys = [
       'Discharge_timestamp' => 'delivery_date'
     ];
-
 
     public function received($file='')
     {

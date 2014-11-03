@@ -21,11 +21,7 @@
 #BEGIN SCRIPT
 #
 
-if [ "$1" = "RECEIVED" ]; then
-   /mnt/flash/root/sms/acsysparser "$2"
-fi
 
-
-/mnt/flash/root/sms/yii sms $1 $2
+/home/tony/Documents/projects/Yii/smsserver/yii sms $1 $2
 # /etc/sms/scripts/fail.php $2
 
