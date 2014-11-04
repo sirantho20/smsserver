@@ -11,6 +11,6 @@ namespace app\transportinterface;
 
 interface TransportInterface {
 
-    public function send($receipient, $message);
-    public function receive($sender, $message);
+    public function send();
+    public function receive();
 }
